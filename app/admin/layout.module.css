@@ -1,0 +1,16 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  direction: rtl;
+}
+
+.main {
+  flex: 1;
+  margin-right: 260px;
+  background: #f2f2f2;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .main { margin-right: 0; }
+}

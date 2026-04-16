@@ -1,0 +1,23 @@
+.page { padding:36px;max-width:1200px;position:relative; }
+.toast { position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:2000;min-width:280px;text-align:center;box-shadow:var(--shadow-lg); }
+.header { display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap; }
+.title { font-family:'Scheherazade New',serif;font-size:1.9rem;color:var(--primary);margin-bottom:4px; }
+.sub { color:var(--text-muted);font-size:0.9rem; }
+.filters { display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap; }
+.searchInput { flex:1;min-width:220px; }
+.catFilter { width:220px; }
+.tableWrap { background:var(--bg-card);border-radius:var(--r-lg);border:1.5px solid var(--border);overflow:hidden; }
+.courseTitle { display:block;font-weight:700;color:var(--primary);font-size:0.95rem;margin-bottom:3px; }
+.courseDesc { display:block;font-size:0.8rem;color:var(--text-muted); }
+.catBadge { padding:3px 10px;border-radius:var(--r-full);font-size:0.8rem;font-weight:700; }
+.levelBadge { background:var(--bg-warm);color:var(--text-secondary);padding:3px 10px;border-radius:var(--r-full);font-size:0.8rem;font-weight:600; }
+.sectionsBtn { background:none;border:1.5px solid var(--border);border-radius:var(--r-full);padding:4px 14px;cursor:pointer;font-size:0.85rem;font-family:'Cairo',sans-serif;color:var(--text-secondary);transition:all 0.2s; }
+.sectionsBtn:hover { border-color:var(--accent);color:var(--accent-dark);background:rgba(232,169,69,0.08); }
+.status { padding:3px 12px;border-radius:var(--r-full);font-size:0.8rem;font-weight:700; }
+.published { background:#f0fdf4;color:#16a34a; }
+.draft { background:#fef9ee;color:#ca8a04; }
+.actions { display:flex;gap:8px; }
+.empty { text-align:center;padding:80px 0;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--text-muted); }
+.empty span { font-size:3.5rem; }
+.empty h3 { font-size:1.3rem;color:var(--primary); }
+@media(max-width:640px){.page{padding:20px;}}
