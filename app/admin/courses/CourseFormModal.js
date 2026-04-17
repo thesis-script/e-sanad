@@ -16,10 +16,23 @@ export default function CourseFormModal({ initial = {}, categories, onSubmit, on
     category_id: initial.category_id || (categories[0]?.id || ''),
     cover_color: initial.cover_color || '#3b82f6',
     level: initial.level || 'بكالوريا', is_published: initial.is_published !== false,
+    pdf_url: initial.pdf_url || '',  // ← ADD THIS
   });
+  const [pdfFile, setPdfFile] = useState(null);       // ← ADD THIS
+  const [uploading, setUploading] = useState(false);   // ← ADD THIS
   const [error, setError] = useState('');
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
+  async function handlePdfUpload(file) {
+    if (!file) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('pdf', file);
+    const res = await fetch('/api/courses/upload-pdf', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.url) set('pdf_url', data.url);
+    setUploading(false);
+  }
   async function handleSubmit(e) {
     e.preventDefault(); setError('');
     const result = await onSubmit(form);
@@ -83,6 +96,27 @@ export default function CourseFormModal({ initial = {}, categories, onSubmit, on
               </div>
             </div>
 
+            {/* PDF Upload */}
+            <div className="form-group">
+              <label className="form-label">ملف PDF للدرس (اختياري)</label>
+              <input
+                type="file"
+                accept="application/pdf"
+                className="form-input"
+                onChange={async e => {
+                  const file = e.target.files[0];
+                  if (file) { setPdfFile(file); await handlePdfUpload(file); }
+                }}
+                style={{ cursor: 'pointer' }}
+              />
+              {uploading && <p style={{ color: 'var(--text-muted)', marginTop: 6 }}>جارٍ رفع الملف...</p>}
+              {form.pdf_url && !uploading && (
+                <p style={{ color: 'green', marginTop: 6 }}>
+                  ✅ تم رفع الملف: <a href={form.pdf_url} target="_blank" rel="noreferrer">معاينة PDF</a>
+                </p>
+              )}
+            </div>
+
             {/* Cover color */}
             <div className="form-group">
               <label className="form-label">لون الغلاف</label>
@@ -104,7 +138,9 @@ export default function CourseFormModal({ initial = {}, categories, onSubmit, on
           </div>
 
           <div className="modal-footer">
-            <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'جارٍ الحفظ...' : 'حفظ الدرس'}</button>
+            <button type="submit" className="btn btn-primary" disabled={loading || uploading}>
+              {loading ? 'جارٍ الحفظ...' : uploading ? 'جارٍ رفع الملف...' : 'حفظ الدرس'}
+            </button>
             <button type="button" className="btn btn-ghost" onClick={onClose}>إلغاء</button>
           </div>
         </form>

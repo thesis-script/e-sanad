@@ -74,7 +74,7 @@ export default async function CourseDetailPage({ params }) {
 
             <h1>{course.title}</h1>
             {course.description && (
-              <div style={{color: '#04143a', textAlign: 'justify'}}
+              <div style={{ color: '#04143a', textAlign: 'justify' }}
                 className={styles.description}
                 dangerouslySetInnerHTML={{ __html: course.description }}
               />
@@ -83,6 +83,32 @@ export default async function CourseDetailPage({ params }) {
             <div className={styles.stats}>
               <span>📚 {course.sections.length} {course.sections.length === 1 ? 'مقطع' : 'مقاطع'}</span>
             </div>
+
+            {course.pdf_url && (
+              <div style={{ margin: '20px  0 100px 0px' }}>
+                <a
+                  href={course.pdf_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: 'white',
+                    color: course.cover_color,
+                    border: `2px solid ${course.cover_color}`,
+                    borderRadius: '10px',
+                    padding: '10px 20px',
+                    fontFamily: 'Cairo, sans-serif',
+                    fontWeight: 700,
+                    textDecoration: 'none',
+                    fontSize: '1rem',
+                  }}
+                >
+                  📄 تحميل ملف PDF
+                </a>
+              </div>
+            )}
           </div>
         </div>
 

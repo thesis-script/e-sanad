@@ -41,7 +41,8 @@ export async function POST(request) {
   if (!session) return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
 
   try {
-    const { title, description, category_id, cover_color, level, is_published } = await request.json();
+    const { title, description, category_id, cover_color, level, is_published, pdf_url } = await request.json();
+
 
     if (!title || !category_id) {
       return NextResponse.json({ error: 'العنوان والفئة مطلوبان' }, { status: 400 });
@@ -50,9 +51,9 @@ export async function POST(request) {
     const slug = generateSlug(title);
 
     const result = await query(
-      `INSERT INTO courses (title, description, slug, category_id, cover_color, level, is_published)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [title, description || '', slug, category_id, cover_color || '#3b82f6', level || 'بكالوريا', is_published !== false]
+      `INSERT INTO courses (title, description, slug, category_id, cover_color, level, is_published, pdf_url)
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [title, description || '', slug, category_id, cover_color || '#3b82f6', level || 'بكالوريا', is_published !== false, pdf_url || null]
     );
 
     return NextResponse.json({ course: result.rows[0] }, { status: 201 });

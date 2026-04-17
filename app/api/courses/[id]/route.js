@@ -36,7 +36,7 @@ export async function PUT(request, { params }) {
 
   try {
     const { id } = params;
-    const { title, description, category_id, cover_color, level, is_published } = await request.json();
+    const { title, description, category_id, cover_color, level, is_published, pdf_url } = await request.json();
 
     if (!title || !category_id) {
       return NextResponse.json({ error: '??????? ?????? ???????' }, { status: 400 });
@@ -44,9 +44,8 @@ export async function PUT(request, { params }) {
 
     const slug = generateSlug(title);
     const result = await query(
-      `UPDATE courses SET title=$1, description=$2, slug=$3, category_id=$4, cover_color=$5, level=$6, is_published=$7, updated_at=NOW()
-       WHERE id=$8 RETURNING *`,
-      [title, description || '', slug, category_id, cover_color || '#3b82f6', level || '????????', is_published !== false, id]
+      `UPDATE courses SET title=$1, description=$2, slug=$3, category_id=$4, cover_color=$5, level=$6, is_published=$7, pdf_url=$8, updated_at=NOW() WHERE id=$9 RETURNING *`,
+      [title, description || '', slug, category_id, cover_color || '#3b82f6', level || 'بكالوريا', is_published !== false, pdf_url ?? null, id]
     );
 
     if (result.rows.length === 0) {
