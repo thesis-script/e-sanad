@@ -1,21 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/auth';
-import crypto from 'crypto';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
 
 export async function POST(request) {
   const session = await getAdminSession();
   if (!session) return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
 
   try {
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const apiKey = process.env.CLOUDINARY_API_KEY;
-    const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-    // Return specific error so we can debug
-    if (!cloudName) return NextResponse.json({ error: 'CLOUDINARY_CLOUD_NAME missing' }, { status: 500 });
-    if (!apiKey)    return NextResponse.json({ error: 'CLOUDINARY_API_KEY missing' }, { status: 500 });
-    if (!apiSecret) return NextResponse.json({ error: 'CLOUDINARY_API_SECRET missing' }, { status: 500 });
-
     const formData = await request.formData();
     const file = formData.get('pdf');
 
@@ -24,37 +16,24 @@ export async function POST(request) {
     }
 
     const bytes = await file.arrayBuffer();
-    const base64 = Buffer.from(bytes).toString('base64');
-    const dataUri = `data:application/pdf;base64,${base64}`;
+    const buffer = Buffer.from(bytes);
 
-    const timestamp = Math.round(Date.now() / 1000);
-    const folder = 'courses_pdfs';
-    const signatureString = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
-    const signature = crypto.createHash('sha256').update(signatureString).digest('hex');
+    // Save to public/uploads/pdfs/
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'pdfs');
+    await mkdir(uploadDir, { recursive: true });
 
-    const body = new FormData();
-    body.append('file', dataUri);
-    body.append('api_key', apiKey);
-    body.append('timestamp', String(timestamp));
-    body.append('signature', signature);
-    body.append('folder', folder);
+    const safeName = file.name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._\u0600-\u06FF-]/g, '');
+    const filename = `${Date.now()}-${safeName}`;
+    const filepath = path.join(uploadDir, filename);
 
-    const uploadRes = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
-      { method: 'POST', body }
-    );
+    await writeFile(filepath, buffer);
 
-    const uploadData = await uploadRes.json();
+    // Return the public URL path
+    const url = `/uploads/pdfs/${filename}`;
+    return NextResponse.json({ url }, { status: 201 });
 
-    if (!uploadRes.ok || !uploadData.secure_url) {
-      // Return the exact Cloudinary error message
-      return NextResponse.json({
-        error: uploadData.error?.message || JSON.stringify(uploadData)
-      }, { status: 500 });
-    }
-
-    return NextResponse.json({ url: uploadData.secure_url }, { status: 201 });
   } catch (error) {
+    console.error('PDF upload error:', error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
