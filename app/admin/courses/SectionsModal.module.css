@@ -1,0 +1,171 @@
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--r-xl);
+  width: 100%;
+  max-width: 780px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 10;
+}
+
+.title {
+  font-family: 'Scheherazade New', serif;
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.sub { font-size: 0.85rem; color: var(--text-muted); }
+
+.body { padding: 24px 28px; flex: 1; display: flex; flex-direction: column; gap: 20px; }
+
+.formSection {
+  background: var(--bg-warm);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  border: 1.5px solid var(--border);
+}
+
+.formTitle {
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
+}
+
+/* Quill editor wrapper */
+.editorWrap {
+  direction: rtl;
+}
+
+/* Override Quill styles to match our design */
+.editorWrap :global(.ql-toolbar) {
+  border: 1.5px solid var(--border) !important;
+  border-bottom: none !important;
+  border-radius: var(--r-md) var(--r-md) 0 0 !important;
+  background: var(--bg-warm) !important;
+  font-family: 'Cairo', sans-serif !important;
+  direction: ltr;
+}
+
+.editorWrap :global(.ql-container) {
+  border: 1.5px solid var(--border) !important;
+  border-top: none !important;
+  border-radius: 0 0 var(--r-md) var(--r-md) !important;
+  font-family: 'Amiri', serif !important;
+  font-size: 1.05rem !important;
+  min-height: 200px;
+  direction: rtl;
+}
+
+.editorWrap :global(.ql-editor) {
+  direction: rtl !important;
+  text-align: right !important;
+  min-height: 200px;
+  line-height: 2 !important;
+  padding: 16px 20px !important;
+  color: var(--text-primary) !important;
+}
+
+.editorWrap :global(.ql-editor.ql-blank::before) {
+  right: 20px !important;
+  left: unset !important;
+  font-style: normal !important;
+  color: var(--text-muted) !important;
+  font-family: 'Cairo', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+
+.editorWrap :global(.ql-toolbar button:hover),
+.editorWrap :global(.ql-toolbar button.ql-active) {
+  color: var(--accent-dark) !important;
+}
+
+.editorWrap :global(.ql-toolbar .ql-stroke) {
+  stroke: var(--text-secondary) !important;
+}
+.editorWrap :global(.ql-toolbar button:hover .ql-stroke),
+.editorWrap :global(.ql-toolbar button.ql-active .ql-stroke) {
+  stroke: var(--accent-dark) !important;
+}
+
+/* Sections list */
+.listMeta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sectionsList { display: flex; flex-direction: column; gap: 12px; }
+
+.sectionItem {
+  background: var(--bg-warm);
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  padding: 16px 18px;
+  transition: border-color 0.2s;
+}
+.sectionItem:hover { border-color: var(--accent); }
+.deleting { border-color: var(--rose) !important; background: #fef2f2 !important; }
+.editing { border-color: var(--accent) !important; background: rgba(232,169,69,0.04) !important; }
+
+.sectionTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sectionIdx {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.sectionTitle { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+.sectionActions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.sectionPreview {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-family: 'Amiri', serif;
+}
+
+.confirmDelete { padding: 4px 0; }
+.confirmDelete p { font-size: 0.9rem; color: var(--rose); font-weight: 600; }
+
+.empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.empty span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+.empty p { font-size: 0.9rem; }
