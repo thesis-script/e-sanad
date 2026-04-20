@@ -37,7 +37,7 @@
   background-color: rgba(255, 255, 255, 0.466);
   border-radius: 8px;
   backdrop-filter: blur(10px);
-  border: 1px solid #3A9AFF;
+  border: 1px solid rgba(255, 255, 255, 0.74);
   width: 100%;
   max-width: 600px;
   align-self: center;
