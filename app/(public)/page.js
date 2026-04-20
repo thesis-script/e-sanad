@@ -7,7 +7,8 @@ import styles from './page.module.css';
 async function getData() {
   try {
     const [catRes, courseRes] = await Promise.all([
-      query(`SELECT c.id, c.*, COUNT(co.id) as course_count FROM categories c LEFT JOIN courses co ON co.category_id = c.id GROUP BY c.id ORDER BY c.created_at DESC LIMIT 6`),
+      // Modify this query to order by your specific IDs
+      query(`SELECT c.id, c.*, COUNT(co.id) as course_count FROM categories c LEFT JOIN courses co ON co.category_id = c.id GROUP BY c.id ORDER BY CASE c.id WHEN 11 THEN 1 WHEN 13 THEN 2 WHEN 12 THEN 3 ELSE 4 END LIMIT 6`),
       query(`SELECT co.*, c.name as category_name, c.slug as category_slug, c.color as category_color, COUNT(s.id) as section_count FROM courses co LEFT JOIN categories c ON co.category_id = c.id LEFT JOIN sections s ON s.course_id = co.id WHERE co.is_published = true GROUP BY co.id, c.name, c.slug, c.color ORDER BY co.created_at DESC LIMIT 6`),
     ]);
     return { categories: catRes.rows, courses: courseRes.rows };
